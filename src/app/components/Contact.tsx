@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { MapPin, Phone, Mail, Send, CheckCircle } from "lucide-react";
+import { useState, useEffect } from "react";
+import emailjs from "@emailjs/browser";
+import { MapPin, Phone, Mail, Send, CheckCircle, AlertCircle } from "lucide-react";
 
 const offices = [
   {
@@ -26,6 +27,8 @@ const destinations = ["UK", "Canada", "Australia", "USA", "Germany", "Ireland", 
 
 export function Contact() {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -35,9 +38,72 @@ export function Contact() {
     message: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Initialize EmailJS
+  useEffect(() => {
+    emailjs.init("SU4e6Ou6TibvzxsJD");
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setLoading(true);
+    setError(null);
+
+    // Validate form
+    if (!form.name || !form.phone || !form.email) {
+      setError("Please fill in all required fields (Name, Phone, Email)");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await emailjs.send(
+        "service_plmm5ow",
+        "template_n6nupwl",
+        {
+          to_email: "gulm34545@gmail.com",
+          name: form.name,
+          phone: form.phone,
+          email: form.email,
+          destination: form.destination || "Not specified",
+          education: form.education || "Not specified",
+          message: form.message || "No additional message",
+        }
+      );
+
+      console.log("Email sent successfully:", response);
+      setSubmitted(true);
+
+      setForm({
+        name: "",
+        phone: "",
+        email: "",
+        destination: "",
+        education: "",
+        message: "",
+      });
+    } catch (error: unknown) {
+      console.error("EmailJS Error Details:", error);
+
+      let errorMessage = "Failed to send enquiry. Please try again.";
+
+      if (error instanceof Error) {
+        errorMessage = error.message;
+        // Add specific error hints
+        if (error.message.includes("invalid_service")) {
+          errorMessage = "Service ID is invalid. Please check your EmailJS configuration.";
+        } else if (error.message.includes("invalid_template")) {
+          errorMessage = "Template ID is invalid. Please check your template setup in EmailJS.";
+        } else if (error.message.includes("invalid_user")) {
+          errorMessage = "Public Key is invalid. Please verify your EmailJS credentials.";
+        } else if (error.message.includes("BadRequest")) {
+          errorMessage = "Template variables mismatch. Please contact support.";
+        }
+      }
+
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -100,6 +166,30 @@ export function Contact() {
                   style={{ background: "#f0f4fb", color: "#0a2558", fontWeight: 600 }}
                 >
                   Submit another enquiry
+                </button>
+              </div>
+            ) : error ? (
+              <div className="h-full flex flex-col items-center justify-center text-center py-12 gap-4">
+                <div
+                  className="w-16 h-16 rounded-full flex items-center justify-center"
+                  style={{ background: "rgba(212, 24, 61, 0.07)" }}
+                >
+                  <AlertCircle size={32} style={{ color: "#d4183d" }} />
+                </div>
+                <h3
+                  style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 900, color: "#d4183d", fontSize: "1.3rem" }}
+                >
+                  Error Sending Message
+                </h3>
+                <p style={{ color: "#5a6a8a", maxWidth: "320px" }}>
+                  {error}
+                </p>
+                <button
+                  onClick={() => setError(null)}
+                  className="mt-2 px-6 py-2.5 rounded-xl text-sm"
+                  style={{ background: "#f0f4fb", color: "#0a2558", fontWeight: 600 }}
+                >
+                  Try again
                 </button>
               </div>
             ) : (
@@ -236,7 +326,8 @@ export function Contact() {
 
                   <button
                     type="submit"
-                    className="flex items-center justify-center gap-2 py-3.5 px-8 rounded-xl text-sm mt-2 hover:opacity-90 transition-opacity"
+                    disabled={loading}
+                    className="flex items-center justify-center gap-2 py-3.5 px-8 rounded-xl text-sm mt-2 hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                     style={{
                       background: "linear-gradient(135deg, #0a2558, #1a3d80)",
                       color: "white",
@@ -244,7 +335,7 @@ export function Contact() {
                       fontFamily: "'Nunito', sans-serif",
                     }}
                   >
-                    <Send size={15} /> Submit Free Consultation Request
+                    <Send size={15} /> {loading ? "Sending..." : "Submit Free Consultation Request"}
                   </button>
                 </form>
               </>

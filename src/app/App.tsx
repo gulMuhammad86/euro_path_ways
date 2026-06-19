@@ -7,6 +7,7 @@ import { Testimonials } from "./components/Testimonials";
 import { Blogs } from "./components/Blogs";
 import { Contact } from "./components/Contact";
 import { Footer } from "./components/Footer";
+import { WhatsAppButton } from "./components/WhatsAppButton";
 
 export default function App() {
   const [activeSection, setActiveSection] = useState("home");
@@ -41,6 +42,7 @@ export default function App() {
         <Contact />
       </main>
       <Footer />
+      <WhatsAppButton />
     </div>
   );
 }
