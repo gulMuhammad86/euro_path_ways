@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Menu, X, GraduationCap } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import logoImage from "../../assets/europatways logo.jpeg";
 
 const navLinks = [
   { label: "Home", href: "#home" },
@@ -30,11 +31,12 @@ export function Navbar({ activeSection }: { activeSection: string }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-8 flex items-center justify-between h-16">
         {/* Logo */}
         <a href="#home" className="flex items-center gap-2.5 group">
-          <div
-            className="w-9 h-9 rounded-lg flex items-center justify-center"
-            style={{ background: "linear-gradient(135deg, #c9a84c, #e8c96a)" }}
-          >
-            <GraduationCap size={20} color="#0a2558" strokeWidth={2.5} />
+          <div className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
+            <img
+              src={logoImage}
+              alt="Euro Pathways Logo"
+              className="w-full h-full object-cover"
+            />
           </div>
           <span
             className="text-white tracking-tight"
