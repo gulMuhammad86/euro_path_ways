@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import logoImage from "../../assets/europatways logo.jpeg";
 
@@ -15,9 +15,12 @@ export function Navbar({ activeSection }: { activeSection: string }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  if (typeof window !== "undefined") {
-    window.addEventListener("scroll", () => setScrolled(window.scrollY > 20), { passive: true });
-  }
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <header
@@ -29,14 +32,9 @@ export function Navbar({ activeSection }: { activeSection: string }) {
       }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-8 flex items-center justify-between h-16">
-        {/* Logo */}
         <a href="#home" className="flex items-center gap-2.5 group">
-          <div className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
-            <img
-              src={logoImage}
-              alt="Euro Pathways Logo"
-              className="w-full h-full object-cover"
-            />
+          <div className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0 border border-white/20">
+            <img src={logoImage} alt="Euro Pathways Logo" className="w-full h-full object-cover" />
           </div>
           <span
             className="text-white tracking-tight"
@@ -46,7 +44,6 @@ export function Navbar({ activeSection }: { activeSection: string }) {
           </span>
         </a>
 
-        {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-1">
           {navLinks.map((link) => {
             const isActive = activeSection === link.href.replace("#", "");
@@ -61,47 +58,33 @@ export function Navbar({ activeSection }: { activeSection: string }) {
                 }}
               >
                 {link.label}
-                {isActive && (
-                  <span
-                    className="absolute bottom-0 left-4 right-4 h-0.5 rounded-full"
-                    style={{ background: "#c9a84c" }}
-                  />
-                )}
+                {isActive && <span className="absolute bottom-0 left-4 right-4 h-0.5 rounded-full" style={{ background: "#c9a84c" }} />}
               </a>
             );
           })}
         </nav>
 
-        {/* CTA */}
         <a
           href="#contact"
-          className="hidden md:flex items-center px-5 py-2 rounded-lg text-sm transition-all duration-200 hover:opacity-90 active:scale-95"
+          className="hidden md:flex items-center px-6 py-2.5 rounded-xl text-sm transition-all duration-200 hover:opacity-90 active:scale-95"
           style={{
             background: "linear-gradient(135deg, #c9a84c, #e8c96a)",
             color: "#0a2558",
             fontWeight: 700,
             fontFamily: "'Nunito', sans-serif",
+            boxShadow: "0 6px 20px rgba(201,168,76,0.28)",
           }}
         >
           Free Consultation
         </a>
 
-        {/* Mobile hamburger */}
-        <button
-          className="md:hidden text-white p-2"
-          onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label="Toggle menu"
-        >
+        <button className="md:hidden text-white p-2" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Toggle menu">
           {mobileOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
 
-      {/* Mobile menu */}
       {mobileOpen && (
-        <div
-          className="md:hidden border-t"
-          style={{ borderColor: "rgba(255,255,255,0.1)", background: "rgba(10,37,88,0.98)" }}
-        >
+        <div className="md:hidden border-t" style={{ borderColor: "rgba(255,255,255,0.1)", background: "rgba(10,37,88,0.98)" }}>
           <div className="px-4 py-4 flex flex-col gap-1">
             {navLinks.map((link) => (
               <a

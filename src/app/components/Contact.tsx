@@ -2,28 +2,40 @@ import { useState, useEffect } from "react";
 import emailjs from "@emailjs/browser";
 import { MapPin, Phone, Mail, Send, CheckCircle, AlertCircle } from "lucide-react";
 
-const offices = [
+const contactDirectory = [
   {
-    city: "Lahore (HQ)",
-    address: "12-B, MM Alam Road, Gulberg III, Lahore",
-    phone: "+92 42 3576 8800",
-    email: "lahore@europathways.pk",
+    name: "Osama bin Shafique",
+    role: "General Manager",
+    phone: "+92 339 9660033",
+    email: "Osamashafique915@gmail.com",
   },
   {
-    city: "Karachi",
-    address: "3rd Floor, Business Avenue, Shahrah-e-Faisal, Karachi",
-    phone: "+92 21 3455 2200",
-    email: "karachi@europathways.pk",
+    name: "Sara Arshad",
+    role: "Managing Director",
+    phone: "+92 339 9665525",
+    email: "s.arshad07860@gmail.com",
   },
   {
-    city: "Islamabad",
-    address: "Blue Area, Jinnah Avenue, F-7/4, Islamabad",
-    phone: "+92 51 2876 3400",
-    email: "islamabad@europathways.pk",
+    name: "Asma Hira",
+    role: "Assistant Director",
+    phone: "+92 318 5363041",
+    email: "saraasma184@gmail.com",
+  },
+  {
+    name: "Mishal Shabana",
+    role: "HR Manager",
+    phone: "+966 58 327 8431",
+    email: "mishimalik852@gmail.com",
+  },
+  {
+    name: "Haleema Sadia",
+    role: "Head of Marketing",
+    phone: "+92 318 5923384",
+    email: "samanofficial181@gmail.com",
   },
 ];
 
-const destinations = ["UK", "Canada", "Australia", "USA", "Germany", "Ireland", "Other"];
+const destinations = ["Germany", "Italy", "France", "Hungary", "UK", "Turkey", "Sweden", "Belgium", "Finland", "Other"];
 
 export function Contact() {
   const [submitted, setSubmitted] = useState(false);
@@ -38,7 +50,6 @@ export function Contact() {
     message: "",
   });
 
-  // Initialize EmailJS
   useEffect(() => {
     emailjs.init("SU4e6Ou6TibvzxsJD");
   }, []);
@@ -48,7 +59,6 @@ export function Contact() {
     setLoading(true);
     setError(null);
 
-    // Validate form
     if (!form.name || !form.phone || !form.email) {
       setError("Please fill in all required fields (Name, Phone, Email)");
       setLoading(false);
@@ -88,7 +98,6 @@ export function Contact() {
 
       if (error instanceof Error) {
         errorMessage = error.message;
-        // Add specific error hints
         if (error.message.includes("invalid_service")) {
           errorMessage = "Service ID is invalid. Please check your EmailJS configuration.";
         } else if (error.message.includes("invalid_template")) {
@@ -113,7 +122,6 @@ export function Contact() {
   return (
     <section id="contact" className="py-24 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
-        {/* Header */}
         <div className="text-center mb-14">
           <span
             className="inline-block px-4 py-1.5 rounded-full text-xs mb-4"
@@ -139,7 +147,6 @@ export function Contact() {
         </div>
 
         <div className="grid lg:grid-cols-5 gap-10">
-          {/* Left: Form */}
           <div
             className="lg:col-span-3 rounded-2xl p-8 sm:p-10"
             style={{ background: "white", border: "1.5px solid rgba(10,37,88,0.08)" }}
@@ -181,9 +188,7 @@ export function Contact() {
                 >
                   Error Sending Message
                 </h3>
-                <p style={{ color: "#5a6a8a", maxWidth: "320px" }}>
-                  {error}
-                </p>
+                <p style={{ color: "#5a6a8a", maxWidth: "320px" }}>{error}</p>
                 <button
                   onClick={() => setError(null)}
                   className="mt-2 px-6 py-2.5 rounded-xl text-sm"
@@ -256,9 +261,7 @@ export function Contact() {
 
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div className="flex flex-col gap-1.5">
-                      <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "#374151" }}>
-                        Preferred Destination
-                      </label>
+                      <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "#374151" }}>Preferred Destination</label>
                       <select
                         name="destination"
                         value={form.destination}
@@ -273,16 +276,12 @@ export function Contact() {
                       >
                         <option value="">Select country</option>
                         {destinations.map((d) => (
-                          <option key={d} value={d}>
-                            {d}
-                          </option>
+                          <option key={d} value={d}>{d}</option>
                         ))}
                       </select>
                     </div>
                     <div className="flex flex-col gap-1.5">
-                      <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "#374151" }}>
-                        Education Level
-                      </label>
+                      <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "#374151" }}>Education Level</label>
                       <select
                         name="education"
                         value={form.education}
@@ -306,9 +305,7 @@ export function Contact() {
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "#374151" }}>
-                      Tell us about yourself (optional)
-                    </label>
+                    <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "#374151" }}>Tell us about yourself (optional)</label>
                     <textarea
                       name="message"
                       value={form.message}
@@ -342,9 +339,7 @@ export function Contact() {
             )}
           </div>
 
-          {/* Right: Offices */}
           <div className="lg:col-span-2 flex flex-col gap-5">
-            {/* Trust badges */}
             <div
               className="rounded-2xl p-6"
               style={{ background: "linear-gradient(135deg, #0a2558, #1a3d80)" }}
@@ -356,17 +351,17 @@ export function Contact() {
                 Why Choose EuroPathways?
               </p>
               {[
-                "Free initial profile assessment",
-                "Dedicated counselor throughout",
-                "No hidden fees — full transparency",
-                "After-hours support available",
-                "Money-back guarantee on visa refusals",
+                "Expert in Europe",
+                "Most affordable service charges",
+                "Pay After work done",
+                "Complete profile assessment",
+                "Unlimited Applications under one time payment",
+                "Expert LOM writing",
+                "Interview preparation",
+                "Sponsor Finance Guidance",
               ].map((point, i) => (
                 <div key={i} className="flex items-start gap-2.5 mb-2.5">
-                  <span
-                    className="mt-0.5 flex-shrink-0"
-                    style={{ color: "#c9a84c", fontSize: "0.85rem", fontWeight: 700 }}
-                  >
+                  <span className="mt-0.5 flex-shrink-0" style={{ color: "#c9a84c", fontSize: "0.85rem", fontWeight: 700 }}>
                     ✓
                   </span>
                   <span style={{ color: "rgba(255,255,255,0.8)", fontSize: "0.86rem" }}>{point}</span>
@@ -374,36 +369,32 @@ export function Contact() {
               ))}
             </div>
 
-            {/* Offices */}
             <div className="flex flex-col gap-4">
-              {offices.map((office, i) => (
-                <div
-                  key={i}
-                  className="rounded-xl p-5"
-                  style={{ background: "white", border: "1.5px solid rgba(10,37,88,0.08)" }}
-                >
-                  <p
-                    className="mb-3"
-                    style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "#0a2558", fontSize: "0.9rem" }}
-                  >
-                    {office.city}
-                  </p>
-                  <div className="flex flex-col gap-1.5">
-                    <div className="flex items-start gap-2" style={{ color: "#5a6a8a", fontSize: "0.8rem" }}>
-                      <MapPin size={13} className="mt-0.5 flex-shrink-0" style={{ color: "#c9a84c" }} />
-                      {office.address}
+              <div className="rounded-xl p-5" style={{ background: "white", border: "1.5px solid rgba(10,37,88,0.08)" }}>
+                <p className="mb-3" style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "#0a2558", fontSize: "0.95rem" }}>
+                  Corporate Contact Directory
+                </p>
+                <div className="flex flex-col gap-3">
+                  {contactDirectory.map((person) => (
+                    <div key={person.email} className="rounded-xl border border-slate-100 p-3">
+                      <p style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "#0a2558", fontSize: "0.9rem" }}>
+                        {person.name}
+                      </p>
+                      <p style={{ color: "#8a6b1a", fontSize: "0.78rem", marginTop: "2px" }}>{person.role}</p>
+                      <div className="mt-2 flex flex-col gap-1.5" style={{ color: "#5a6a8a", fontSize: "0.8rem" }}>
+                        <div className="flex items-start gap-2">
+                          <Phone size={13} className="mt-0.5 flex-shrink-0" style={{ color: "#c9a84c" }} />
+                          {person.phone}
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <Mail size={13} className="mt-0.5 flex-shrink-0" style={{ color: "#c9a84c" }} />
+                          {person.email}
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2" style={{ color: "#5a6a8a", fontSize: "0.8rem" }}>
-                      <Phone size={13} style={{ color: "#c9a84c" }} />
-                      {office.phone}
-                    </div>
-                    <div className="flex items-center gap-2" style={{ color: "#5a6a8a", fontSize: "0.8rem" }}>
-                      <Mail size={13} style={{ color: "#c9a84c" }} />
-                      {office.email}
-                    </div>
-                  </div>
+                  ))}
                 </div>
-              ))}
+              </div>
             </div>
           </div>
         </div>

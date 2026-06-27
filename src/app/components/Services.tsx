@@ -1,4 +1,4 @@
-import { FileText, BookOpen, Plane, MessageSquare, Search, CreditCard } from "lucide-react";
+import { FileText, BookOpen, Plane, MessageSquare, Search, CircleDollarSign } from "lucide-react";
 
 const services = [
   {
@@ -16,11 +16,11 @@ const services = [
     highlight: "SOP & documentation",
   },
   {
-    icon: <BookOpen size={26} />,
-    title: "Test Preparation",
+    icon: <CircleDollarSign size={26} />,
+    title: "Sponsor Profile Evaluation",
     description:
-      "IELTS, TOEFL, GRE, and GMAT preparation with expert tutors, mock tests, and personalized study plans.",
-    highlight: "IELTS / TOEFL / GRE",
+      "Don't let unverified bank transactions ruin your dream. Let our experts audit and structure your financial file.",
+    highlight: "Financial file review",
   },
   {
     icon: <Plane size={26} />,
@@ -37,7 +37,7 @@ const services = [
     highlight: "1-on-1 coaching",
   },
   {
-    icon: <CreditCard size={26} />,
+    icon: <BookOpen size={26} />,
     title: "Scholarship Guidance",
     description:
       "Identify and apply for scholarships, fellowships, and funding opportunities available specifically for Pakistani students.",
@@ -45,11 +45,29 @@ const services = [
   },
 ];
 
+const valueProps = [
+  {
+    title: "Step-by-Step Guidance",
+    description: "A clear path from profile evaluation to university selection and visa submission.",
+  },
+  {
+    title: "Post-Paid Installments",
+    description: "Flexible payment plans that are structured around completed milestones and work delivered.",
+  },
+  {
+    title: "100% Process Transparency",
+    description: "Stay informed at every stage with open communication and complete document tracking.",
+  },
+  {
+    title: "24/7 Student Support",
+    description: "Round-the-clock assistance for urgent questions, updates, and follow-ups.",
+  },
+];
+
 export function Services() {
   return (
     <section id="services" className="py-24 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
-        {/* Section header */}
         <div className="text-center mb-16">
           <span
             className="inline-block px-4 py-1.5 rounded-full text-xs mb-4"
@@ -80,7 +98,6 @@ export function Services() {
           </p>
         </div>
 
-        {/* Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service, i) => (
             <div
@@ -114,7 +131,20 @@ export function Services() {
           ))}
         </div>
 
-        {/* CTA strip */}
+        <div className="mt-12 grid gap-4 md:grid-cols-2">
+          {valueProps.map((item) => (
+            <div key={item.title} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+              <h3
+                className="mb-2"
+                style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "#0a2558", fontSize: "1rem" }}
+              >
+                {item.title}
+              </h3>
+              <p style={{ color: "#5a6a8a", lineHeight: 1.6, fontSize: "0.9rem" }}>{item.description}</p>
+            </div>
+          ))}
+        </div>
+
         <div
           className="mt-16 rounded-2xl p-8 sm:p-10 flex flex-col sm:flex-row items-center justify-between gap-6"
           style={{ background: "linear-gradient(135deg, #0a2558 0%, #1a3d80 100%)" }}
