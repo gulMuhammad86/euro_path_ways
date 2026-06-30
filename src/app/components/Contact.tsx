@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import emailjs from "@emailjs/browser";
+import { useState } from "react";
 import { MapPin, Phone, Mail, Send, CheckCircle, AlertCircle } from "lucide-react";
 
 const contactDirectory = [
@@ -35,7 +34,8 @@ const contactDirectory = [
   },
 ];
 
-const destinations = ["Germany", "Italy", "France", "Hungary", "UK", "Turkey", "Sweden", "Belgium", "Finland", "Other"];
+const destinations = ["Germany", "Italy", "France", "Hungary", "UK", "Turkey", "Sweden", "Belgium", "Finland"];
+const WEB3FORMS_ACCESS_KEY = "f208cca3-d7a6-4347-b8fd-c2c4e53d0c72";
 
 export function Contact() {
   const [submitted, setSubmitted] = useState(false);
@@ -50,10 +50,6 @@ export function Contact() {
     message: "",
   });
 
-  useEffect(() => {
-    emailjs.init("SU4e6Ou6TibvzxsJD");
-  }, []);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -66,50 +62,40 @@ export function Contact() {
     }
 
     try {
-      const response = await emailjs.send(
-        "service_plmm5ow",
-        "template_n6nupwl",
-        {
-          to_email: "gulm34545@gmail.com",
-          name: form.name,
-          phone: form.phone,
-          email: form.email,
-          destination: form.destination || "Not specified",
-          education: form.education || "Not specified",
-          message: form.message || "No additional message",
-        }
-      );
+      const formData = new FormData();
+      formData.append("access_key", WEB3FORMS_ACCESS_KEY);
+      formData.append("name", form.name);
+      formData.append("phone", form.phone);
+      formData.append("email", form.email);
+      formData.append("destination", form.destination || "Not specified");
+      formData.append("education", form.education || "Not specified");
+      formData.append("message", form.message || "No additional message");
+      formData.append("subject", "New consultation request from EuroPathways");
+      formData.append("from_name", "EuroPathways Website");
 
-      console.log("Email sent successfully:", response);
-      setSubmitted(true);
-
-      setForm({
-        name: "",
-        phone: "",
-        email: "",
-        destination: "",
-        education: "",
-        message: "",
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
       });
-    } catch (error: unknown) {
-      console.error("EmailJS Error Details:", error);
 
-      let errorMessage = "Failed to send enquiry. Please try again.";
+      const data = await response.json();
 
-      if (error instanceof Error) {
-        errorMessage = error.message;
-        if (error.message.includes("invalid_service")) {
-          errorMessage = "Service ID is invalid. Please check your EmailJS configuration.";
-        } else if (error.message.includes("invalid_template")) {
-          errorMessage = "Template ID is invalid. Please check your template setup in EmailJS.";
-        } else if (error.message.includes("invalid_user")) {
-          errorMessage = "Public Key is invalid. Please verify your EmailJS credentials.";
-        } else if (error.message.includes("BadRequest")) {
-          errorMessage = "Template variables mismatch. Please contact support.";
-        }
+      if (data.success) {
+        setSubmitted(true);
+        setForm({
+          name: "",
+          phone: "",
+          email: "",
+          destination: "",
+          education: "",
+          message: "",
+        });
+      } else {
+        setError(data.message || "Failed to send enquiry. Please try again.");
       }
-
-      setError(errorMessage);
+    } catch (error: unknown) {
+      console.error("Web3Forms Error Details:", error);
+      setError("Failed to send enquiry. Please try again.");
     } finally {
       setLoading(false);
     }

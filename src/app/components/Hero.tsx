@@ -1,10 +1,10 @@
 import { ArrowRight, CheckCircle, Users, Award, Globe } from "lucide-react";
 
 const stats = [
-  { value: "5,000+", label: "Students Placed" },
-  { value: "98%", label: "Visa Success Rate" },
-  { value: "15+", label: "Countries Covered" },
-  { value: "12 Yrs", label: "Experience" },
+  { value: "100+", label: "Student Consultations" },
+  { value: "95%", label: "Goal Achievement Rate" },
+  { value: "10+", label: "Partner Universities" },
+  { value: "1 Yr", label: "Startup Momentum" },
 ];
 
 const strategicGrid = [
@@ -104,13 +104,11 @@ export function Hero() {
             <div className="flex flex-wrap gap-4">
               <a
                 href="#contact"
-                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl text-sm transition-all duration-200 hover:opacity-90 hover:translate-y-[-1px] shadow-lg"
+                className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-full text-sm font-semibold transition-all duration-200 hover:opacity-90 hover:-translate-y-0.5 shadow-[0_18px_35px_rgba(0,0,0,0.18)]"
                 style={{
                   background: "linear-gradient(135deg, #c9a84c, #e8c96a)",
                   color: "#0a2558",
-                  fontWeight: 700,
                   fontFamily: "'Nunito', sans-serif",
-                  boxShadow: "0 8px 30px rgba(201,168,76,0.35)",
                 }}
               >
                 Get Free Consultation <ArrowRight size={16} />

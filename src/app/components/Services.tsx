@@ -27,7 +27,7 @@ const services = [
     title: "Visa Processing",
     description:
       "Complete visa application management with document checklist, interview preparation, and embassy coordination.",
-    highlight: "98% visa success rate",
+    highlight: "End-to-end visa support",
   },
   {
     icon: <MessageSquare size={26} />,
